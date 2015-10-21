@@ -140,6 +140,8 @@ const CGFloat CLVLoginButtonBaseHeight = 44.0;
     CGFloat moveY = 8;
     CGAffineTransform moveTransform = CGAffineTransformMakeTranslation(moveX, moveY);
     cleverText = CGPathCreateCopyByTransformingPath(cleverText, &moveTransform);
+    moveTransform = CGAffineTransformMakeScale(0.7 ,0.7);
+    cleverText = CGPathCreateCopyByTransformingPath(cleverText, &moveTransform);
     
     CGContextAddPath(context, cleverText);
     CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
