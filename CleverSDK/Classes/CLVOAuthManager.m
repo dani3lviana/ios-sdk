@@ -60,7 +60,8 @@ static NSString *const CLVServiceName = @"com.clever.CleverSDK";
 }
 
 + (NSString *)redirectUri {
-    return [NSString stringWithFormat:@"clever-%@://oauth", [CLVOAuthManager clientId]];
+//    return [NSString stringWithFormat:@"clever-%@://oauth", [CLVOAuthManager clientId]];
+    return @"https://api.otusplus.com/clever/oauth_callback";
 }
 
 + (BOOL)handleURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
