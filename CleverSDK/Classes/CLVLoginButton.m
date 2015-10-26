@@ -15,7 +15,7 @@
 const CGFloat CLVLoginButtonBaseWidth = 248.0;
 const CGFloat CLVLoginButtonBaseHeight = 44.0;
 
-@interface CLVLoginButton ()
+@interface CLVLoginButton () <UINavigationControllerDelegate>
 
 @property (nonatomic, weak) UIViewController *parent;
 @property (nonatomic, strong) UIImageView *textImage;
@@ -76,7 +76,18 @@ const CGFloat CLVLoginButtonBaseHeight = 44.0;
 
 - (void)loginButtonPressed:(id)loginButton {
     CLVOAuthWebViewController *vc = [[CLVOAuthWebViewController alloc] initWithParent:self.parent districtId:self.districtId];
-    [self.parent presentViewController:vc animated:YES completion:nil];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:vc];
+    [navController setModalPresentationStyle:UIModalPresentationPageSheet];
+//    [navController setDelegate:self];
+    [self.parent presentViewController:navController animated:YES completion:^{
+        UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancelCleverLogin:)];
+        [vc.navigationItem setLeftBarButtonItem:barBtnCancel];
+    }];
+}
+
+- (void)onCancelCleverLogin:(id)sender{
+    [self.parent dismissViewControllerAnimated:YES completion:nil];
 }
 
 + (UIImage *)backgroundImageForButton {

@@ -9,9 +9,11 @@
 #import "CLVOAuthWebViewController.h"
 #import "CLVOAuthManager.h"
 
+#import <WebKit/WebKit.h>
+
 @interface CLVOAuthWebViewController ()
 
-@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, weak) UIViewController *parent;
 @property (nonatomic, strong) NSString *districtId;
 
@@ -33,8 +35,29 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessTokenReceived:) name:CLVAccessTokenReceivedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(oauthAuthorizeFailed:) name:CLVOAuthAuthorizeFailedNotification object:nil];
-    self.webView = [[UIWebView alloc] initWithFrame:self.view.frame];
+    
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    NSString *script = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);";
+    WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:script injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO];
+    WKUserContentController *wkUController = [[WKUserContentController alloc] init];
+    [wkUController addUserScript:wkUScript];
+    
+    config.userContentController = wkUController;
+    
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
     [self.view addSubview:self.webView];
+    [self.webView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addConstraints:[NSLayoutConstraint
+                               constraintsWithVisualFormat:@"V:|[_webView]|"
+                               options:0
+                               metrics:nil
+                               views:NSDictionaryOfVariableBindings(_webView)]];
+    
+    [self.view addConstraints:[NSLayoutConstraint
+                               constraintsWithVisualFormat:@"H:|[_webView]|"
+                               options:0
+                               metrics:nil
+                               views:NSDictionaryOfVariableBindings(_webView)]];
     
     if ([CLVOAuthManager clientIdIsNotSet]) {
         [[[UIAlertView alloc] initWithTitle:@"Error"

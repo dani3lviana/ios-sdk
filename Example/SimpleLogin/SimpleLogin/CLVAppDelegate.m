@@ -22,7 +22,7 @@
     
     // Start the CleverSDK with your clientID
     // Do not forget to replace CLIENT_ID with your client_id
-    [CLVOAuthManager startWithClientId:@"CLIENT_ID"];
+    [CLVOAuthManager startWithClientId:@"95553b8051312757dd00"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     CLVLoginViewController *vc = [[CLVLoginViewController alloc] initWithNibName:nil bundle:nil];
